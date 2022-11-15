@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspector</title>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://libs.zappar.com/zappar-aframe/0.3.36/zappar-aframe.js"></script>
+    <link rel="stylesheet" href="instant.css">
+</head>
+
+<body>
+
+
+    <a-scene id="scene1">
+        <a-entity camera zappar-camera></a-entity>
+        <a-entity zappar-permissions-ui id="permissions">
+            <!-- Remove the text entity to use Zappar's default permission denied UI -->
+            <a-entity text="value: Please reload the page, accepting the camera permissions." position="0 0 -2">
+            </a-entity>
+        </a-entity>
+        <a-entity zappar-instant="placement-mode: true;" id="instant">
+            <a-gltf-model id="model1" src="img/sofaRuangTamu.gltf" scale="0.1 0.1 0.1" position="0 -1 0"></a-gltf-model>
+        </a-entity>
+    </a-scene>
+
+
+    <button id="btnKiri">Maju</button>
+    <button id="btnKanan">Mundur</button>
+    <button id="btnMaju">Angle Depan</button>
+    <button id="btnMundur">Angle Belakang</button>
+
+    <h3 id="ukuran">SCALE</h3>
+    <input type="range" name="scale" id="scale" min="0" max="2" step="0.1">
+
+
+    <script>
+        var scene = document.querySelector("#scene1");
+        scene.addEventListener('click', function () {
+            var tracker = document.querySelector("#instant");
+            tracker.setAttribute('zappar-instant', 'placement-mode: false');
+        });
+
+        var kanan = document.querySelector("#btnKanan");
+        var Kiri = document.querySelector("#btnKiri");
+        var maju = document.querySelector("#btnMaju");
+        var mundur = document.querySelector("#btnMundur");
+        let posisi = 0;
+        let angle = 0;
+
+        kanan.addEventListener('click', function () {
+            let model = document.querySelector("#model1");
+            posisi -= 0.1;
+            model.setAttribute('position', `0 -1 ${posisi}`);
+        });
+        Kiri.addEventListener('click', function () {
+            let model = document.querySelector("#model1");
+            posisi += 0.1;
+            model.setAttribute('position', `0 -1 ${posisi}`);
+        });
+        maju.addEventListener('click', function () {
+            let model = document.querySelector("#model1");
+            angle += 2;
+            model.setAttribute('rotation', `${angle} 0 0`);
+        });
+        mundur.addEventListener('click', function () {
+            let model = document.querySelector("#model1");
+            angle -= 2;
+            model.setAttribute('rotation', `${angle} 0 0`);
+        });
+
+
+        const scale = document.querySelector("#scale");
+        scale.addEventListener('input', function () {
+            // console.log(scale.value);
+            const value = scale.value;
+            const model = document.querySelector("#model1");
+            model.setAttribute('scale', `${value} ${value} ${value}`);
+        });
+
+    </script>
+
+</body>
+
+</html>
