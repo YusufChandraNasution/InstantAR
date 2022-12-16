@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <style type="text/css">
+        #HeadText {
+            width: 300px;
+            height: 400px;
+            position: absolute;
+            padding: 20px;
+            top: 0px;
+            left: 10%;
+            z-index: 10000;
+            overflow: auto;
+            box-sizing: border-box;
+            /* visibility: hidden; */
+        }
+
+        .bg {
+            background-color: aquamarine;
+
+        }
+
+        .isi1 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10001;
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body style='margin : 0px; overflow: hidden;'>
+    <script src="https://aframe.io/releases/0.8.2/aframe.min.js">
+    </script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+    <script>
+        AFRAME.registerComponent('hello', {
+            schema: {
+                pesan: { type: "string", default: "hello" },
+                pesan2: { type: "string", default: "hello2" }
+            },
+            init: function () {
+                let data = this.data;
+                let el = this.el;
+
+                this.el.addEventListener("click", function (ev) {
+                    console.log(data.pesan + " " + data.pesan2);
+                    let clickedData = ev.srcElement.getAttribute('position');
+                    let y = clickedData.y + 0.01;
+                    let x = clickedData.x;
+                    ev.srcElement.setAttribute('position', x + " " + y + " " + "0")
+                })
+            }
+        });
+    </script>
+    <!-- <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/dev/aframe/build/aframe-ar.js"></script> -->
+
+
+    <a-scene arjs>
+        <input type="range" name="scale" id="scale" min="0" max="2" step="0.1"
+            style="z-index: 9999999;position: relative;">
+
+        <div id="HeadText" class="bg" style="visibility: hidden;">
+            <h3>ISINYA</h3>
+            <div class="isi1">
+                <h1>marker 1</h1>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet odio error ducimus, facere sunt vitae
+                    ab
+                    delectus corrupti consequuntur excepturi debitis blanditiis dicta libero quod itaque voluptates nisi
+                    aut
+                    odit.</p>
+            </div>
+            <div class="isi1">
+                <h1>marker 2</h1>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet odio error ducimus, facere sunt vitae
+                    ab
+                    delectus corrupti consequuntur excepturi debitis blanditiis dicta libero quod itaque voluptates nisi
+                    aut
+                    odit.</p>
+            </div>
+        </div>
+        <!-- <div id="HeadText" style="visibility:hidden;">
+            <h1>marker 2</h1>
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Amet odio error ducimus, facere sunt vitae ab
+                delectus corrupti consequuntur excepturi debitis blanditiis dicta libero quod itaque voluptates nisi aut
+                odit.</p>
+        </div> -->
+        <a-marker id="marker" preset='hiro'>
+            <a-box hello="pesan2: box merah" id="MyBox" position='0 0.5 0' material='opacity: 0.7;' scale="1 1 1"
+                color="red"></a-box>
+        </a-marker>
+        <a-marker id="marker" preset='kanji'>
+            <a-box hello="pesan2: box merah1" id="MyBox" position='0 0.5 0' material='opacity: 0.7;' scale="1 1 1"
+                color="yellow"></a-box>
+        </a-marker>
+
+        <a-camera-static />
+        <a-cursor></a-cursor>
+    </a-scene>
+</body>
+
+<script>
+
+
+
+
+    // Fix all Done
+    // Pengecekan deskripsi berdasarkan marker
+    var m = document.querySelectorAll("#marker");
+    var pos = document.querySelector("#HeadText");
+    for (let i = 0; i <= m.length; i++) {
+        for (let j = 0; j <= m.length; j++) {
+            if (m[j] == m[i]) {
+                // pos.style.visibility = "hidden";
+                m[j].addEventListener("markerFound", (e) => {
+                    pos.style.visibility = "visible";
+                    console.log("found");
+                    text = document.querySelectorAll(".isi1");
+                    text[j].style.visibility = "visible";
+                    text[j].style.position = "relative";
+                    const scale = document.querySelector("#scale");
+                    scale.addEventListener('input', function () {
+                        console.log(scale.value);
+                        const value = scale.value;
+                        const model = document.querySelectorAll("#MyBox");
+                        model[j].setAttribute('scale', `${value} ${value} ${value}`);
+                    });
+
+                });
+                m[j].addEventListener("markerLost", (e) => {
+                    pos.style.visibility = "hidden";
+                    console.log("Lost");
+                    text = document.querySelectorAll(".isi1");
+                    text[j].style.visibility = "hidden";
+                    text[j].style.position = "absolute";
+
+                });
+            }
+        }
+    }
+
+
+    // Contoh 1 Done tpi banyak if nya
+
+    // var m = document.querySelectorAll("a-marker");
+    // for (let i = 0; i <= m.length; i++) {
+    //     if (m[i] == m[0]) {
+    //         m[i].addEventListener("markerFound", (e) => {
+    //             console.log("found")
+    //             document.getElementById("HeadText1").style.visibility = "visible";
+    //             document.getElementById("HeadText2").style.visibility = "hidden";
+    //         })
+    //     } else if (m[i] == m[1]) {
+    //         m[i].addEventListener("markerFound", (e) => {
+    //             console.log("found")
+    //             document.getElementById("HeadText2").style.visibility = "visible";
+    //             document.getElementById("HeadText1").style.visibility = "hidden";
+    //         })
+    //     }
+    // }
+
+
+    // else{
+    //     m[0].addEventListener("markerLost", (e) => {
+    //         console.log("Lost")
+    //         document.getElementById("HeadText1").style.visibility = "hidden";
+    //     })
+    // }
+
+    // m.addEventListener("markerLost", (e) => {
+    //     console.log("lost");
+    //     document.getElementById("HeadText").style.visibility = "visible";
+    // })
+
+    // Pengecekan deskripsi berdasarkan marker
+
+</script>
+
+</html>
+
+</head>
+
+<body>
