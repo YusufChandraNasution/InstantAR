@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+<!-- we import arjs version without NFT but with marker + location based support -->
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+<script src="https://raw.githack.com/fcor/arjs-gestures/master/dist/gestures.js"></script>
+
+
+
+
+
+<body style="margin : 0px; overflow: hidden;">
+
+  <a-scene arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;" embedded
+    renderer="logarithmicDepthBuffer: true;" vr-mode-ui="enabled: false" gesture-detector id="scene">
+    <a-marker preset="kanji" raycaster="objects: .clickable" emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
+      <a-entity scale="0.5 0.5 0.5" gltf-model="img/among.gltf" position="0 0 0" class="clickable"
+        gesture-handler></a-entity>
+    </a-marker>
+    <a-entity camera></a-entity>
+  </a-scene>
+
+
+  <!-- <script>
+        sceneEl.addEventListener("onefingermove", handleRotation);
+        sceneEl.addEventListener("markerFound", (e) => {
+            isMarkerVisible = true;
+        });
+
+        sceneEl.addEventListener("markerLost", (e) => {
+            isMarkerVisible = false;
+        });
+
+        handleRotation(event) {
+            if (isMarkerVisible) {
+            el.object3D.rotation.y += event.detail.positionChange.x * rotationFactor;
+
+            el.object3D.rotation.x += event.detail.positionChange.y * rotationFactor;
+            }
+        }
+    </script> -->
+</body>
+
+</html>
